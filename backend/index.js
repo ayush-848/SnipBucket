@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
-      "https://snip-bucket.vercel.app/",
+      "https://snip-bucket.vercel.app",
       "http://localhost:5174",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -28,7 +28,7 @@ app.use("/auth", userRoutes);
 app.use("/api", postRoutes);
 
 app.get('/',(req,res)=>{
-  res.send('This is ShipBucket API')
+  res.send('This is SniBucket API')
 })
 
 
