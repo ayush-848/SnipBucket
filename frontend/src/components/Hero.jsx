@@ -34,7 +34,7 @@ const Hero = () => {
 
         {/* Short Descriptive Text */}
         <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed md:leading-tight" >
-          Snipbucket is here to make your code snippets always accessible, organized, and easy to share — no matter where you are.
+          Snipbucket is here to make your code snippets always accessible, organized, and easy to share.
         </p>
 
         {/* Big Responsive Search Bar */}

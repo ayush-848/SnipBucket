@@ -31,8 +31,8 @@ exports.loggedinUser=async(req,res)=>{
     if (!isMatch) return res.status(400).send("Invalid credentials");
   
     // Generate JWT token
-    const token = jwt.sign({ id: user._id, email: user.email }, "secret_key", {
-      expiresIn: "1h",
+    const token = jwt.sign({ id: user._id, email: user.email, username: user.username }, `${process.env.JWT_SECRET}`, {
+      expiresIn: "24h",
     });
   
     res.status(200).json({ token });
