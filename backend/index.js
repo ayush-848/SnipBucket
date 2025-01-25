@@ -1,6 +1,7 @@
 const express=require('express');
 const userRoutes=require('./routes/userRoutes');
 const postRoutes=require('./routes/postRoutes');
+const bodyParser = require('body-parser');
 const connectDB =require('./config/connectDb');
 const cors=require('cors')
 
@@ -11,7 +12,18 @@ const port=8000||process.env.PORT;
 const app=express();
 
 app.use(express.json());
-app.use(cors());
+app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: [
+      "https://snip-bucket.vercel.app/",
+      "http://localhost:5174",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use("/auth", userRoutes);
 app.use("/api", postRoutes);
 
