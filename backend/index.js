@@ -15,6 +15,10 @@ app.use(cors());
 app.use("/auth", userRoutes);
 app.use("/api", postRoutes);
 
+app.get('/',(req,res)=>{
+  res.send('This is ShipBucket API')
+})
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
