@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 const connectDB =require('./config/connectDb');
 const cors=require('cors')
 
+const app=express();
 require('dotenv').config();
 connectDB();
 
 const port=8000||process.env.PORT;
-const app=express();
 
 app.use(express.json());
 app.use(bodyParser.json());
