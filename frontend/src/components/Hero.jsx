@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bg from '../assets/result.svg';
 import Navbar from './Navbar';
-
+import { FaSearch, FaCode, FaShareAlt, FaClipboardList } from 'react-icons/fa';
 
 const Hero = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("Searching for: ", searchQuery);
+  };
+
   return (
     <div
-      className="relative h-screen bg-cover bg-center"
+      className="relative min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${bg})` }}
     >
       {/* Overlay for contrast */}
@@ -15,14 +26,47 @@ const Hero = () => {
       <Navbar />
       
       {/* Hero content */}
-      <div className="relative z-10 text-center text-white flex flex-col items-center justify-center h-full px-6 font-montserrat">
+      <div className="relative z-10 text-center text-white flex flex-col items-center justify-center h-full px-6 mt-20">
+        {/* Dynamic Tagline */}
         <h1 className="text-4xl md:text-5xl font-semibold mb-8 tracking-tight leading-tight md:leading-snug">
-        Get, Share, and Access Your Code Snippets Anywhere
+          Your Code, Your Way
         </h1>
-        <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed md:leading-loose">
-          Snipbucket helps you save time by keeping all your code snippets in one secure, accessible place.
+
+        {/* Short Descriptive Text */}
+        <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed md:leading-tight" >
+          Snipbucket is here to make your code snippets always accessible, organized, and easy to share — no matter where you are.
         </p>
-        
+
+        {/* Big Responsive Search Bar */}
+        <form onSubmit={handleSearchSubmit} className="relative w-full max-w-4xl mb-10">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search for your code snippets..."
+            className="w-full py-4 px-6 text-lg rounded-lg bg-gray-800 text-white border-2 border-transparent focus:border-[#560090] focus:outline-none"
+          />
+          <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2">
+            <FaSearch className="text-[#560090] text-2xl" />
+          </button>
+        </form>
+
+        {/* Features with Icons */}
+        <div className="flex space-x-12 mt-8 mb-12 text-white justify-center">
+          <div className="flex flex-col items-center">
+            <FaCode className="text-3xl mb-4" />
+            <p className="text-lg">Store & Organize</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <FaShareAlt className="text-3xl mb-4" />
+            <p className="text-lg">Share with Ease</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <FaClipboardList className="text-3xl mb-4" />
+            <p className="text-lg">Access Anywhere</p>
+          </div>
+        </div>
+
         {/* Call to Action Buttons */}
         <div className="flex space-x-6 mt-8">
           {/* Primary Button */}
