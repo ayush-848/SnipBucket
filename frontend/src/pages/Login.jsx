@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext"; // Adjust the import path as needed
 import { Eye, EyeOff } from "lucide-react";
-import logo from "../assets/logo.svg";
+import logo from "../../public/assets/logo.svg";
 import Navbar from "../components/Navbar";
 import { handleError } from "../utils/messageHandler";
 import { useNavigate } from "react-router-dom";

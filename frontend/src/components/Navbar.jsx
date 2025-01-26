@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from '../assets/logo.svg'
+import logo from '../../public/assets/logo.svg'
 import { AuthContext } from '../context/AuthContext'  // Assuming you have an AuthContext
 
 const navigation = [

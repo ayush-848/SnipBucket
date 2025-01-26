@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import logo from '../assets/logo.svg';
+import logo from '../../public/assets/logo.svg';
 import { AuthContext } from '../context/AuthContext'; // Import the context
 
 const SignUp = () => {
