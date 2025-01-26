@@ -17,7 +17,7 @@ const CreatePostForm = () => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, {
         title,
-        content,
+        content: content.replace(/\n/g, "\\n"), // Escape newlines for code content
         tag,
       });
 
@@ -49,23 +49,25 @@ const CreatePostForm = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
             className="w-full px-4 py-2 bg-gray-700 text-white rounded"
+            placeholder="Enter the title of the code post"
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="content" className="block text-sm font-semibold mb-1">Content</label>
+          <label htmlFor="content" className="block text-sm font-semibold mb-1">Code Content</label>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
-            rows="6"
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded"
+            rows="8"
+            className="w-full px-4 py-2 bg-gray-700 text-white font-mono rounded"
+            placeholder="Enter your code here..."
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="tag" className="block text-sm font-semibold mb-1">Tag</label>
+          <label htmlFor="tag" className="block text-sm font-semibold mb-1">Tags</label>
           <input
             id="tag"
             type="text"
@@ -73,14 +75,16 @@ const CreatePostForm = () => {
             onChange={(e) => setTag(e.target.value)}
             required
             className="w-full px-4 py-2 bg-gray-700 text-white rounded"
-            placeholder="e.g., JavaScript, C++, Python"
+            placeholder="e.g., JavaScript, React, Python"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2 text-white font-semibold rounded ${loading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-700"}`}
+          className={`w-full py-2 text-white font-semibold rounded ${
+            loading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {loading ? "Creating Post..." : "Create Post"}
         </button>
