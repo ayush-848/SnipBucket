@@ -1,7 +1,7 @@
 import React from 'react';
 import { Code, BookOpen, Share2, ArrowRight } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
-import CodeShowcase from './CodeShowCase';
+import CodeShowcase from './CodeShowcase'
 
 const Hero = () => {
   return (
