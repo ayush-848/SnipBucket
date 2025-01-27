@@ -7,10 +7,12 @@ import CreatePostForm from './pages/CreatePostForm';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from './context/AuthContext';
 
 const App = () => {
   return (
     <Router>
+        <AuthProvider>
         <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -19,6 +21,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+        </AuthProvider>
     </Router>
   );
 }

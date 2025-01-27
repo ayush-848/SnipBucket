@@ -1,21 +1,12 @@
 const db = require("../utils/firebase");
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, tag, visibility = 'public' } = req.body; // Default visibility is 'public'
-    const authorId = req.user.id; // From middleware (verified JWT)
+    const { title, content, tag,username } = req.body; // Default visibility is 'public'
+    const authorId = req.user._id; // From middleware (verified JWT)
+
     
     if (!authorId) {
       return res.status(400).json({ message: "Invalid author ID" });
-    }
-
-    console.log("Author ID:", authorId); // Log for debugging
-
-
-    const username = req.user.username;
-    if(!username){
-      res.status(404).json({
-        message:'Username not exist'
-      })
     }
 
     // Reference to Firestore collection for posts
@@ -28,7 +19,7 @@ exports.createPost = async (req, res) => {
       authorId: authorId, // Link the post to the authenticated user
       username: username,  // Include the username
       tag: tag,       // Add the tag to the post
-      visibility: visibility, // Use the visibility from the request body, default is 'public'
+      visibility: 'public', // Use the visibility from the request body, default is 'public'
       views: 0,  // Initial views count
       likes: 0,  // Initial likes count
       createdAt: new Date().toISOString(), // Timestamp for creation
@@ -36,7 +27,8 @@ exports.createPost = async (req, res) => {
 
     // Only return the postId and success message
     res.status(201).json({
-      message: "Post created successfully",
+      success:true,
+      message: "Post created successfully 201",
       postId: newPost.id,
     });
   } catch (error) {

@@ -54,10 +54,10 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition flex items-center justify-center">
+            <button className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition flex items-center justify-center cursor-pointer">
               Get Started <ArrowRight className="ml-2" size={20} />
             </button>
-            <button className="border border-gray-700 text-gray-300 px-6 py-3 rounded-md hover:bg-gray-800 transition">
+            <button className="border border-gray-700 text-gray-300 px-6 py-3 rounded-md hover:bg-gray-800 transition cursor-pointer">
               View Demo
             </button>
           </div>
