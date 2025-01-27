@@ -87,7 +87,7 @@ const CreatePostForm = () => {
         setTag("javascript");
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1000);
       } else {
         handleError('Failed to create post');
       }
