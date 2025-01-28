@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CopyIcon } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -6,6 +6,17 @@ import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 const CodeShowcase = () => {
   const [activeLanguage, setActiveLanguage] = useState("javascript");
   const [copyButtonText, setCopyButtonText] = useState("Copy");
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [codeTheme, setCodeTheme] = useState(nightOwl); // Code theme state for dynamic styling
+
+  useEffect(() => {
+    // Change code theme based on active language
+    if (activeLanguage === 'python') {
+      setCodeTheme({ ...nightOwl, background: '#2d2d2d' }); // Example theme change for Python
+    } else {
+      setCodeTheme(nightOwl);
+    }
+  }, [activeLanguage]);
 
   const handleCopy = () => {
     // Copy the active code snippet to the clipboard
@@ -14,30 +25,59 @@ const CodeShowcase = () => {
     setTimeout(() => setCopyButtonText("Copy"), 1000);
   };
 
+  const handleLanguageChange = (lang) => {
+    setIsLoading(true); // Show loading when language is being changed
+    setTimeout(() => {
+      setActiveLanguage(lang); // Set the active language
+      setIsLoading(false); // Hide loading after language is updated
+    }, 500); // Adjusted timeout for smoother transition
+  };
+
   const codeSnippets = {
     javascript: `// Simple JavaScript Example
 function greet(name) {
   console.log('Hello, ' + name + '!');
 }
 
-greet('World');`,
+greet('World');
+
+function calculateSum(a, b) {
+  return a + b;
+}
+
+const sum = calculateSum(10, 20);
+console.log("Sum:", sum);`,
+
     cpp: `// Simple C++ Example
 #include <iostream>
 using namespace std;
 
 int main() {
     cout << "Hello, World!" << endl;
+    int a = 5, b = 10;
+    cout << "Sum: " << a + b << endl;
     return 0;
 }`,
+
     python: `# Simple Python Example
 def greet(name):
     print(f"Hello, {name}!")
 
-greet("World")`,
+greet("World")
+
+def calculate_sum(a, b):
+    return a + b
+
+result = calculate_sum(10, 20)
+print("Sum:", result)`,
+
     java: `// Simple Java Example
 public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
+        int a = 5;
+        int b = 10;
+        System.out.println("Sum: " + (a + b));
     }
 }`,
   };
@@ -51,12 +91,12 @@ public class HelloWorld {
 
   return (
     <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 shadow-2xl w-full max-w-4xl mx-auto">
-      <div className="flex flex-wrap justify-between items-center mb-4 border-b border-gray-800 pb-3 ">
-        <div className="flex flex-wrap space-x-2 ">
+      <div className="flex flex-wrap justify-between items-center mb-4 border-b border-gray-800 pb-3">
+        <div className="flex flex-wrap space-x-2">
           {Object.keys(codeSnippets).map((lang) => (
             <button
               key={lang}
-              onClick={() => setActiveLanguage(lang)}
+              onClick={() => handleLanguageChange(lang)}
               className={`px-4 py-2 rounded-md text-sm uppercase cursor-pointer tracking-wider font-medium transition-all duration-300 ease-in-out ${
                 activeLanguage === lang
                   ? `${languageColors[lang]} bg-gray-800 shadow-md`
@@ -73,16 +113,33 @@ public class HelloWorld {
         </div>
       </div>
 
-      <div className="relative h-[320px]">
+      <div className="relative h-[400px]"> {/* Increased height for code box */}
         <div className="bg-gray-800 p-6 rounded-lg text-sm font-mono overflow-y-auto border border-gray-700 shadow-inner absolute inset-0 w-full">
-          <SyntaxHighlighter
-            language={activeLanguage}
-            wrapLongLines
-            style={nightOwl} // Choose your theme, e.g., solarizedlight, docco, etc.
-            customStyle={{ padding: '20px', borderRadius: '8px', fontSize: '0.875rem' }}
-          >
-            {codeSnippets[activeLanguage]}
-          </SyntaxHighlighter>
+          {isLoading ? (
+            // Skeleton Loader with added detail
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
+              <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
+              <div className="h-4 bg-gray-700 rounded mb-2 w-4/5"></div>
+              <div className="h-4 bg-gray-700 rounded mb-2 w-3/5"></div>
+              <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div> {/* Extra loader */}
+            </div>
+          ) : (
+            <SyntaxHighlighter
+              language={activeLanguage}
+              wrapLongLines
+              style={codeTheme} // Use dynamic theme based on active language
+              customStyle={{
+                padding: '20px',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                background: '#1e1e1e', // Set a default dark background for code box
+              }}
+            >
+              {codeSnippets[activeLanguage]}
+            </SyntaxHighlighter>
+          )}
         </div>
         <div className="absolute top-4 right-4 opacity-50 hover:opacity-100 transition-opacity">
           <button

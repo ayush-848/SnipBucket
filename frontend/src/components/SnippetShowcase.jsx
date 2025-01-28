@@ -41,13 +41,13 @@ const SnippetShowcase = () => {
     <div className="bg-gray-950 text-white py-12">
       {/* Section Header */}
       <header className="mb-12 text-center">
-        <h2 className="text-5xl font-bold text-white">Top 6 Code Snippets</h2>
+        <h2 className="text-5xl font-bold text-white">Check out some snippets below</h2>
         <p className="text-gray-400 mt-2 text-lg">Explore the most liked snippets</p>
       </header>
 
       {/* Grid Layout for Displaying Snippet Cards */}
       <div className="items-center mx-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mx-auto px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 mx-auto px-6">
           {topLikedPosts.map((post) => (
             <div className="w-full" key={post.id}>
               <SnippetCard post={post} />

@@ -42,7 +42,7 @@ const SnippetCard = ({ post }) => {
 
         {/* Tag below title */}
         <div className="mt-2">
-          <span className="px-2.5 py-1 text-xs font-medium bg-green-500 text-white rounded-md">
+          <span className="px-2.5 py-1 text-xs font-medium bg-green-700 text-white rounded-md">
             {post.tag}
           </span>
         </div>
@@ -65,7 +65,6 @@ const SnippetCard = ({ post }) => {
             <div className="flex items-center space-x-3 text-sm">
               <span className="text-gray-500">Posted by:
               <Link 
-                to={`/user/${post.username}`} 
                 className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
                 &nbsp;{post.username}

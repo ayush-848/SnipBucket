@@ -10,15 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@babel/parser": "^7.26.7",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.6.0",
     "@tailwindcss/vite": "^4.0.0",
-    "@uiw/react-codemirror": "^4.23.7",
     "axios": "^1.7.9",
-    "codemirror": "^5.65.18",
+    "highlight.js": "^11.11.1",
     "lucide-react": "^0.474.0",
     "prettier": "^3.4.2",
+    "prism-react-renderer": "^2.4.1",
     "react": "^18.3.1",
     "react-codemirror2": "^8.0.0",
     "react-dom": "^18.3.1",
