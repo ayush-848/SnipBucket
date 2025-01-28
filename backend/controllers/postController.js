@@ -1,7 +1,7 @@
 const db = require("../utils/firebase");
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, tag,username } = req.body; // Default visibility is 'public'
+    const { title, content, tag,username,visibility='public' } = req.body; // Default visibility is 'public'
     const authorId = req.user._id; // From middleware (verified JWT)
 
     
@@ -19,7 +19,7 @@ exports.createPost = async (req, res) => {
       authorId: authorId, // Link the post to the authenticated user
       username: username,  // Include the username
       tag: tag,       // Add the tag to the post
-      visibility: 'public', // Use the visibility from the request body, default is 'public'
+      visibility: visibility, // Use the visibility from the request body, default is 'public'
       views: 0,  // Initial views count
       likes: 0,  // Initial likes count
       createdAt: new Date().toISOString(), // Timestamp for creation

@@ -12,7 +12,6 @@ import { AuthProvider } from './context/AuthContext';
 const App = () => {
   return (
     <Router>
-        <AuthProvider>
         <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,7 +20,6 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-        </AuthProvider>
     </Router>
   );
 }
