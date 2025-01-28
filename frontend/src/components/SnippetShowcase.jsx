@@ -38,9 +38,9 @@ const SnippetShowcase = () => {
     .slice(0, 6); // Get the top 6 liked posts
 
   return (
-    <div className="bg-gray-950 text-white py-12">
+    <div className=" bg-gray-950 text-white py-12 ">
       {/* Section Header */}
-      <header className="mb-12 text-center">
+      <header className="mb-12 text-center mt-36">
         <h2 className="text-5xl font-bold text-white">Check out some snippets below</h2>
         <p className="text-gray-400 mt-2 text-lg">Explore the most liked snippets</p>
       </header>
