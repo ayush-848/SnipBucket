@@ -47,7 +47,7 @@ const SnippetShowcase = () => {
 
       {/* Grid Layout for Displaying Snippet Cards */}
       <div className="items-center mx-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 mx-auto px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-12 mx-auto px-6">
           {topLikedPosts.map((post) => (
             <div className="w-full" key={post.id}>
               <SnippetCard post={post} />
