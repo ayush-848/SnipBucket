@@ -1,4 +1,16 @@
 const db = require("../utils/firebase");
+const axios=require('axios');
+require('dotenv').config()
+
+const HUGGING_FACE_API_KEY=process.env.HUGGING_FACE_API_KEY;
+const API_URL = 'https://api-inference.huggingface.co/models';
+
+// Model endpoints
+const MODELS = {
+  CODE_IMPROVEMENT: 'microsoft/codereviewer',
+  CODE_TITLE: 'microsoft/codebert-base'  // Better for code understanding
+};
+
 exports.createPost = async (req, res) => {
   try {
     const { title, content, tag,username,visibility='public' } = req.body; // Default visibility is 'public'
@@ -36,7 +48,6 @@ exports.createPost = async (req, res) => {
     res.status(500).json({ message: "Error creating post" });
   }
 };
-
 
 
 // Get all posts (accessible to both authenticated and non-authenticated users)
@@ -108,3 +119,123 @@ exports.getPostById = async (req, res) => {
     res.status(500).json({ message: "Error fetching post details" });
   }
 };
+
+
+async function callHuggingFaceAPI(model, input) {
+  try {
+    const response = await axios.post(
+      `${API_URL}/${model}`,
+      { inputs: input },
+      {
+        headers: {
+          Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000 // 30 second timeout
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error calling ${model}:`, error.response?.data || error.message);
+    throw error;
+  }
+}
+
+exports.improveSnippet = async (req, res) => {
+  const { codeSnippet } = req.body;
+
+  if (!codeSnippet) {
+    return res.status(400).json({ error: 'Code snippet is required' });
+  }
+
+  try {
+    // Format the prompt for better results
+    const prompt = `Review and improve this code:\n${codeSnippet}\n\nImproved version:`;
+    
+    const response = await callHuggingFaceAPI(MODELS.CODE_IMPROVEMENT, prompt);
+    
+    const improvedSnippet = response[0]?.generated_text?.trim() || response[0]?.summary_text?.trim();
+    
+    if (!improvedSnippet) {
+      throw new Error('No improvement generated');
+    }
+
+    res.json({ 
+      improvedSnippet,
+      original: codeSnippet 
+    });
+
+  } catch (error) {
+    console.error('Code improvement error:', error);
+    res.status(500).json({ 
+      error: 'Failed to improve the code snippet',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+
+
+
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const apiKey = process.env.GEMINI_API_KEY; // Set your Gemini API key here
+const genAI = new GoogleGenerativeAI(apiKey);
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-exp", // Correct model for Gemini 2.0
+});
+
+const generationConfig = {
+  temperature: 1,
+  topP: 0.95,
+  topK: 40,
+  maxOutputTokens: 8192,
+  responseMimeType: "text/plain",
+};
+
+exports.generateTitle = async (req, res) => {
+  const { codeSnippet } = req.body;
+
+  if (!codeSnippet) {
+    return res.status(400).json({ error: 'Code snippet is required' });
+  }
+
+  try {
+    // Start a new chat session with Gemini 2.0 model
+    const chatSession = model.startChat({
+      generationConfig,
+      history: [
+        {
+          role: "user",
+          parts: [
+            { text: `Give **one** direct, proper and detailed title for the following code without any un-necessary prompt:\n\n${codeSnippet}` },
+          ],
+        },
+      ],
+    });
+
+    // Send the message and get the response
+    const result = await chatSession.sendMessage('Request for code title');
+    
+    // Extract the response text
+    const responseText = result.response.text().trim();
+
+    // Clean up the response to extract only the title
+    const cleanedTitle = responseText
+      .replace(/Okay, here's \*\*one\*\* proper and detailed title for the provided code:\n+/i, '') // Remove extra explanation
+      .replace(/^["`]*|["`]*$/g, '') // Remove quotes or backticks if present
+      .replace(/\n+/g, ' ') // Remove extra new lines
+      .trim();
+
+    if (!cleanedTitle) {
+      return res.status(500).json({ error: 'Failed to generate title' });
+    }
+
+    res.json({ title: cleanedTitle,success:true });
+  } catch (error) {
+    console.error('Title generation error:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to generate title', details: error.response?.data || error.message });
+  }
+};
+
+

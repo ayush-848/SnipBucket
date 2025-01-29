@@ -1,6 +1,6 @@
-body,p,li,u,span {
+p,li,u {
     font-family: 'Open Sans', sans-serif; /* Default body font */
   }
-  h1, h2, h3 {
-    font-family: 'Montserrat', sans-serif; /* Apply Montserrat for headers */
+  h1, h2, h3{
+    font-family: 'Montserrat';
   }

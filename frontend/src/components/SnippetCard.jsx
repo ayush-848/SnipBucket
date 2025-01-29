@@ -28,9 +28,9 @@ const SnippetCard = ({ post }) => {
   }, [post.content]);
 
   return (
-    <div className="bg-gray-850 border border-gray-750 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 min-h-[400px] flex flex-col">
+    <div className="bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 bg-opacity-30 backdrop-blur-lg border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 min-h-[400px] flex flex-col">
       {/* Header */}
-      <div className="p-6 border-b border-gray-750">
+      <div className="p-6 border-b border-gray-700">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-100 truncate">
             <Link
@@ -60,14 +60,14 @@ const SnippetCard = ({ post }) => {
       </div>
 
       {/* Code Snippet */}
-      <div className="p-6 bg-gray-800 text-xs flex-grow overflow-x-auto max-w-full">
+      <div className="p-6 bg-gray-800 bg-opacity-40 backdrop-blur-md text-sm flex-grow overflow-x-auto max-w-full rounded-lg">
         <pre className={`language-${post.tag} whitespace-pre-wrap break-words`}>
           <code>{truncateContent(post.content)}</code>
         </pre>
       </div>
 
       {/* Footer */}
-      <div className="p-6 border-t border-gray-750">
+      <div className="p-6 border-t border-gray-700">
         <div className="flex justify-between items-center text-sm text-gray-400">
           <div className="flex items-center space-x-3">
             <Calendar size={16} className="text-gray-400" />
