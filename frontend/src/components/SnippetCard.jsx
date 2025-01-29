@@ -1,12 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Heart, Eye } from "lucide-react";
-import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-css";
-import "prismjs/components/prism-python";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
+import javascript from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
+import typescript from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
+import css from "react-syntax-highlighter/dist/esm/languages/prism/css";
+import python from "react-syntax-highlighter/dist/esm/languages/prism/python";
+
+// Register languages
+SyntaxHighlighter.registerLanguage("javascript", javascript);
+SyntaxHighlighter.registerLanguage("typescript", typescript);
+SyntaxHighlighter.registerLanguage("css", css);
+SyntaxHighlighter.registerLanguage("python", python);
 
 const SnippetCard = ({ post }) => {
   const truncateContent = (content, maxLines = 6) => {
@@ -22,10 +28,6 @@ const SnippetCard = ({ post }) => {
       year: "numeric",
     });
   };
-
-  React.useEffect(() => {
-    Prism.highlightAll();
-  }, [post.content]);
 
   return (
     <div className="bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 bg-opacity-30 backdrop-blur-lg border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 min-h-[400px] flex flex-col">
@@ -61,9 +63,21 @@ const SnippetCard = ({ post }) => {
 
       {/* Code Snippet */}
       <div className="p-6 bg-gray-800 bg-opacity-40 backdrop-blur-md text-sm flex-grow overflow-x-auto max-w-full rounded-lg">
-        <pre className={`language-${post.tag} whitespace-pre-wrap break-words`}>
-          <code>{truncateContent(post.content)}</code>
-        </pre>
+        <SyntaxHighlighter
+          language={post.tag}
+          style={nightOwl}
+          className="whitespace-pre-wrap break-words"
+          customStyle={{
+            padding: '20px',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            background: '#1e1e1e', // Set a default dark background for code box
+          }}
+          wrapLines={true}
+          wrapLongLines={true}
+        >
+          {truncateContent(post.content)}
+        </SyntaxHighlighter>
       </div>
 
       {/* Footer */}

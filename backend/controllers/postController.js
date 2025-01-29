@@ -1,15 +1,15 @@
 const db = require("../utils/firebase");
-const axios=require('axios');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
 require('dotenv').config()
 
-const HUGGING_FACE_API_KEY=process.env.HUGGING_FACE_API_KEY;
-const API_URL = 'https://api-inference.huggingface.co/models';
 
-// Model endpoints
-const MODELS = {
-  CODE_IMPROVEMENT: 'microsoft/codereviewer',
-  CODE_TITLE: 'microsoft/codebert-base'  // Better for code understanding
-};
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-exp", 
+});
+
 
 exports.createPost = async (req, res) => {
   try {
@@ -121,69 +121,10 @@ exports.getPostById = async (req, res) => {
 };
 
 
-async function callHuggingFaceAPI(model, input) {
-  try {
-    const response = await axios.post(
-      `${API_URL}/${model}`,
-      { inputs: input },
-      {
-        headers: {
-          Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        timeout: 30000 // 30 second timeout
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(`Error calling ${model}:`, error.response?.data || error.message);
-    throw error;
-  }
-}
-
-exports.improveSnippet = async (req, res) => {
-  const { codeSnippet } = req.body;
-
-  if (!codeSnippet) {
-    return res.status(400).json({ error: 'Code snippet is required' });
-  }
-
-  try {
-    // Format the prompt for better results
-    const prompt = `Review and improve this code:\n${codeSnippet}\n\nImproved version:`;
-    
-    const response = await callHuggingFaceAPI(MODELS.CODE_IMPROVEMENT, prompt);
-    
-    const improvedSnippet = response[0]?.generated_text?.trim() || response[0]?.summary_text?.trim();
-    
-    if (!improvedSnippet) {
-      throw new Error('No improvement generated');
-    }
-
-    res.json({ 
-      improvedSnippet,
-      original: codeSnippet 
-    });
-
-  } catch (error) {
-    console.error('Code improvement error:', error);
-    res.status(500).json({ 
-      error: 'Failed to improve the code snippet',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
-  }
-};
 
 
 
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const apiKey = process.env.GEMINI_API_KEY; // Set your Gemini API key here
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-exp", // Correct model for Gemini 2.0
-});
 
 const generationConfig = {
   temperature: 1,

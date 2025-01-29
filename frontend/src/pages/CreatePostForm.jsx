@@ -13,7 +13,7 @@ const CreatePostForm = () => {
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("javascript");
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [visibility, setVisibility] = useState('Public');
   const [generatingTitle, setGeneratingTitle] = useState(false);
   const [generatedTitle, setGeneratedTitle] = useState(null);
   const navigate = useNavigate();
@@ -58,12 +58,6 @@ const CreatePostForm = () => {
     }
   };
 
-  const Spinner = ({ size = 'sm' }) => (
-    <div className={`animate-spin rounded-full border-2 border-current border-t-transparent 
-      ${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'}`}
-    />
-  );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,6 +77,7 @@ const CreatePostForm = () => {
           content,
           tag: String(tag),
           username: user.username,
+          visibility:visibility
         },
         {
           withCredentials: true,
@@ -101,7 +96,7 @@ const CreatePostForm = () => {
         setGeneratedTitle(null);
         setTimeout(() => {
           navigate("/"); 
-        }, 3000);
+        }, 2000);
       } else {
         handleError('Failed to create post');
       }
@@ -296,25 +291,25 @@ const CreatePostForm = () => {
               
               {/* Visibility Section */}
               <div className="space-y-6">
-                <label className="block text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                  Post Visibility
+                <label className="block text-sm font-semibold text-gray-400 tracking-wider">
+                  Post Visibility:- <span className="text-green-600">{visibility}</span>
                 </label>
                 <div className="grid grid-cols-2 gap-4">
-                  {['Public', 'Private'].map((visibility) => (
-                    <button
-                      key={visibility}
-                      type="button"
-                      onClick={() => visibility(visibility.toLowerCase())}
-                      className={`px-6 py-3 text-center rounded-xl border-2 transition-all
-                        ${visibility === 'Public' 
-                          ? 'border-blue-500/50 bg-blue-500/10 text-blue-400' 
-                          : 'border-gray-800/50 text-gray-500 hover:border-gray-700'
-                        }`}
-                    >
-                      {visibility}
-                    </button>
-                  ))}
-                </div>
+      {['Public', 'Private'].map((vis) => (
+        <button
+          key={vis}
+          type="button"
+          onClick={() => setVisibility(vis)}
+          className={`px-6 py-3 text-center rounded-xl cursor-pointer border-2 transition-all
+            ${visibility === vis
+              ? 'border-blue-500 bg-blue-500/20 text-blue-500 font-semibold' // Active state styles
+              : 'border-gray-300 text-gray-500' // Inactive state styles
+            }`}
+        >
+          {vis}
+        </button>
+      ))}
+    </div>
               </div>
             </div>
 

@@ -4,11 +4,11 @@ import axios from "axios";
 import { 
   Share2Icon, 
   DownloadIcon, 
-  ArrowLeftIcon, 
-  ThumbsUpIcon, 
-  EyeIcon, 
-  TagIcon, 
-  CopyIcon 
+  ArrowLeftIcon,
+  CopyIcon,
+  CodeIcon,
+  CalendarIcon,
+  UserIcon
 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -19,15 +19,11 @@ const PostDetails = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // State for button text
-  const [shareButtonText, setShareButtonText] = useState("Share Post");
   const [copyButtonText, setCopyButtonText] = useState("Copy Code");
+  const [minimumLoadTimePassed, setMinimumLoadTimePassed] = useState(false);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    setShareButtonText("Copied!");
-    setTimeout(() => setShareButtonText("Share Post"), 2000); // Reset after 2 seconds
   };
 
   const handleDownload = () => {
@@ -41,139 +37,188 @@ const PostDetails = () => {
   const handleCopyCode = () => {
     navigator.clipboard.writeText(post.content);
     setCopyButtonText("Copied!");
-    setTimeout(() => setCopyButtonText("Copy Code"), 2000); // Reset after 2 seconds
+    setTimeout(() => setCopyButtonText("Copy Code"), 2000);
   };
 
+  
+
+  const SkeletonLoader = () => (
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+      <Navbar />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mb-8 animate-pulse">
+          <div className="h-5 w-24 bg-gray-800 rounded-full"></div>
+        </div>
+  
+        <div className="bg-gray-900/40 backdrop-blur-2xl rounded-3xl border border-gray-800/50 shadow-2xl overflow-hidden">
+          <div className="px-10 py-8 border-b border-gray-800/50">
+            <div className="h-10 bg-gray-800 rounded-xl w-3/4 mb-6"></div>
+            <div className="flex space-x-6">
+              <div className="h-9 bg-gray-800 rounded-lg w-32"></div>
+              <div className="h-9 bg-gray-800 rounded-lg w-32"></div>
+              <div className="h-9 bg-gray-800 rounded-lg w-32"></div>
+            </div>
+          </div>
+  
+          <div className="p-10">
+            <div className="h-96 bg-gray-800 rounded-2xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-900/50 to-transparent animate-shimmer" />
+            </div>
+          </div>
+  
+          <div className="px-10 pb-8">
+            <div className="flex justify-between">
+              <div className="flex space-x-4">
+                <div className="h-12 bg-gray-800 rounded-xl w-32"></div>
+                <div className="h-12 bg-gray-800 rounded-xl w-32"></div>
+              </div>
+              <div className="h-12 bg-gray-800 rounded-xl w-32"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setMinimumLoadTimePassed(true);
+    }, 2000);
+    
     const fetchPost = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/posts/${id}`);
-        const post = response.data;
-        setPost(post);
+        setPost(response.data);
       } catch (error) {
         setError("Unable to retrieve post details.");
-        console.error("Fetch error:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPost();
+    return () => clearTimeout(timer);
   }, [id]);
 
-  if (loading) {
-    return <div className="text-center py-10 text-slate-600">Loading...</div>;
+  if ((loading || !minimumLoadTimePassed) && !error) {
+    return <SkeletonLoader />;
   }
 
-  if (error) {
-    return <div className="text-center py-10 text-rose-600">{error}</div>;
-  }
-
-  if (!post) {
-    return <div className="text-center py-10 text-slate-600">No post found</div>;
-  }
+  if (loading) return <div className="bg-gray-950 text-center py-20 text-gray-500">Loading Snippet...</div>;
+  if (error) return <div className="text-center py-20 text-red-400">{error}</div>;
+  if (!post) return <div className="text-center py-20 text-gray-500">No masterpiece found</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c0118] via-gray-900 to-[#0c0118]">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <Navbar />
-      <div className="relative min-h-screen bg-gradient-to-b from-[#0c0118] via-gray-900 to-[#0c0118] overflow-hidden font-montserrat flex items-center justify-center p-4">
-        <article className="w-full max-w-4xl bg-white/5 backdrop-blur-lg rounded-xl shadow-2xl border border-white/10 overflow-hidden">
-          <div className="p-8 space-y-6">
-            <h1 className="text-4xl font-bold text-sky-300 border-b pb-3 border-slate-700">
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Back Button */}
+        <div className="mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center text-gray-400 hover:text-blue-400 transition-colors group"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2 transition-transform group-hover:-translate-x-1" />
+            Back 
+          </Link>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-gray-900/40 backdrop-blur-2xl rounded-3xl border border-gray-800/50 shadow-2xl overflow-hidden">
+          {/* Header Section */}
+          <div className="px-10 py-8 border-b border-gray-800/50 bg-gradient-to-r from-gray-900/60 to-gray-900/30">
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500">
               {post.title}
             </h1>
-
-            <div className="flex justify-between items-center text-sm text-slate-400">
-              <div className="flex items-center space-x-3">
-                <span className="text-sky-500">Author:</span>
-                <span className="font-medium text-slate-200 bg-white/10 px-2 py-1 rounded">
-                  {post.username}
-                </span>
-                <span className="text-slate-500">
-                  Published: {new Date(post.createdAt).toLocaleDateString()}
-                </span>
+            <div className="mt-4 flex items-center space-x-6 text-gray-400">
+              <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
+                <UserIcon className="h-5 w-5 text-blue-400" />
+                <span className="font-medium">{post.username}</span>
               </div>
-            </div>
-
-            <div className="prose prose-invert max-w-none bg-white/5 p-4 rounded-lg border border-white/10">
-            <SyntaxHighlighter
-  language={post.tag || "javascript"}
-  wrapLongLines
-  showLineNumbers
-  style={nightOwl}
-  customStyle={{
-    width: "100%",          // Ensure it takes up full width
-    maxWidth: "100%",       // Prevent it from exceeding the screen width
-    height: "auto",         // Allow the height to adjust automatically
-    borderRadius: "0.5rem",
-    padding: "1rem",
-    overflowX: "auto",      // Ensure horizontal scroll when needed
-  }}
->
-  {post.content}
-</SyntaxHighlighter>
-
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 text-sm text-slate-400">
-              <div className="bg-white/10 p-4 rounded-lg flex items-center space-x-2">
-                <ThumbsUpIcon className="h-5 w-5 text-sky-500" />
+              <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
+                <CalendarIcon className="h-5 w-5 text-blue-400" />
                 <span>
-                  Likes: <span className="text-sky-300">{post.likes}</span>
+                  {new Date(post.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                  })}
                 </span>
               </div>
-              <div className="bg-white/10 p-4 rounded-lg flex items-center space-x-2">
-                <EyeIcon className="h-5 w-5 text-emerald-500" />
-                <span>
-                  Views: <span className="text-emerald-300">{post.views}</span>
-                </span>
+              <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
+                <CodeIcon className="h-5 w-5 text-blue-400" />
+                <span className="font-mono">{post.tag}</span>
               </div>
-              {post.tag && (
-                <div className="bg-white/10 p-4 rounded-lg flex items-center space-x-2">
-                  <TagIcon className="h-5 w-5 text-violet-500" />
-                  <span>
-                    Tag: <span className="text-violet-300">{post.tag}</span>
-                  </span>
-                </div>
-              )}
             </div>
+          </div>
 
-            <div className="flex justify-between items-center border-t pt-4 border-slate-700">
-              <div className="flex space-x-2">
+          {/* Code Display */}
+          <div className="p-4">
+            <div className=" relative group rounded-2xl overflow-hidden border-2 border-gray-800/50 shadow-xl hover:border-blue-500/30 transition-all">
+              <SyntaxHighlighter
+                language={post.tag || "javascript"}
+                style={nightOwl}
+                customStyle={{
+                  overflowX:'hidden',
+                  padding: '2rem',
+                  background: '#0A0A0A',
+                  borderRadius: '0.75rem',
+                  fontSize: '0.8rem',
+                  lineHeight: '1.5',
+                  width: '100%',
+                  maxWidth: '100%',
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word'
+                }}
+                wrapLines={true}
+                showLineNumbers
+              >
+                {post.content}
+              </SyntaxHighlighter>
+              
+              {/* Floating Actions */}
+              <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
-                  onClick={handleShare}
-                  className="px-4 py-2 text-sm border rounded text-sky-300 border-sky-500 hover:bg-sky-500/10 transition flex items-center cursor-pointer"
+                  onClick={handleCopyCode}
+                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-blue-500/30 transition-colors cursor-pointer"
                 >
-                  <Share2Icon className="h-4 w-4 mr-2" />
-                  {shareButtonText}
+                  <CopyIcon className="h-5 w-5 text-gray-400 hover:text-blue-400" />
+                  <span className="text-sm text-gray-300">{copyButtonText}</span>
                 </button>
                 <button
                   onClick={handleDownload}
-                  className="px-4 py-2 text-sm border rounded text-emerald-300 border-emerald-500 hover:bg-emerald-500/10 transition flex items-center cursor-pointer"
+                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-blue-500/30 transition-colors cursor-pointer"
                 >
-                  <DownloadIcon className="h-4 w-4 mr-2" />
-                  Download
-                </button>
-                <button
-                  onClick={handleCopyCode}
-                  className="px-4 py-2 text-sm border rounded text-amber-300 border-amber-500 hover:bg-amber-500/10 transition flex items-center cursor-pointer"
-                >
-                  <CopyIcon className="h-4 w-4 mr-2" />
-                  {copyButtonText}
+                  <DownloadIcon className="h-5 w-5 text-gray-400 hover:text-blue-400" />
+                  <span className="text-sm text-gray-300">Download</span>
                 </button>
               </div>
             </div>
           </div>
-        </article>
 
-        <div className="mt-4 text-center absolute bottom-6">
-          <Link
-            to="/"
-            className="text-sm text-sky-300 hover:text-sky-500 transition flex items-center justify-center cursor-pointer"
-          >
-            <ArrowLeftIcon className="h-4 w-4 mr-1" />
-            Return to Posts
-          </Link>
+          {/* Stats & Share */}
+          <div className="px-10 pb-8">
+            <div className="flex justify-between items-center">
+              <div className="flex space-x-4 text-gray-400">
+                <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
+                  <span className="text-blue-400">Views</span>
+                  <span className="font-mono">{post.views}</span>
+                </div>
+                <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
+                  <span className="text-blue-400">Likes</span>
+                  <span className="font-mono">{post.likes}</span>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleShare}
+                className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-800/50 hover:border-blue-500/30 transition-colors"
+              >
+                <Share2Icon className="h-5 w-5 text-gray-400" />
+                <span className="text-gray-300">Share</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
