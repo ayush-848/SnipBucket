@@ -22,7 +22,7 @@ const About = () => {
 
   return (
     <div className="bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950">
-      <div className="max-w-6xl mx-auto px-6 text-center" >
+      <div className="max-w-screen mx-auto px-6 text-center" >
         {/* Title */}
         <h2 className="text-4xl font-bold text-white mb-24 tracking-tight relative" >
           How{' '}
