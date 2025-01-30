@@ -38,20 +38,20 @@ const SnippetShowcase = () => {
     .slice(0, 6);
 
   return (
-    <section className="bg-gray-950 text-white py-20">
+    <section className="bg-gray-950 text-white py-12 sm:py-20">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Section Header */}
-        <header className="mb-16 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <header className="mb-8 sm:mb-16 text-center px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
             Check out some snippets below
           </h2>
-          <p className="text-gray-400 text-lg md:text-xl">
+          <p className="text-gray-400 text-base sm:text-lg md:text-xl">
             Explore the most liked snippets
           </p>
         </header>
 
-        {/* Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mx-20">
+        {/* Responsive Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 px-4 sm:px-8 lg:px-12">
           {topLikedPosts.map((post) => (
             <div 
               key={post.id}
