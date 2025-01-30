@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { handleError, handleSuccess } from '../utils/messageHandler';
-import LogoutAnimation from '../logoutAnimation'
+import LogoutAnimation from '../assets/logoutAnimation'
 
 const AuthContext = createContext();
 

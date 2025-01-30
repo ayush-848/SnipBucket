@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SnippetCard from "./SnippetCard"; // Import SnippetCard component
+import SnippetCard from "./SnippetCard";
 
 const SnippetShowcase = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch posts from the API
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -23,39 +22,47 @@ const SnippetShowcase = () => {
     fetchPosts();
   }, []);
 
-  // Loading state while posts are being fetched
   if (loading) {
     return (
-      <div className="text-center text-gray-500">
-        <span className="text-xl">Loading posts...</span>
+      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xl text-gray-400">Loading posts...</span>
+        </div>
       </div>
     );
   }
 
-  // Sort posts by likes in descending order and take top 6
   const topLikedPosts = posts
-    .sort((a, b) => b.likes - a.likes) // Sort in descending order by likes
-    .slice(0, 6); // Get the top 6 liked posts
+    .sort((a, b) => b.likes - a.likes)
+    .slice(0, 6);
 
   return (
-    <div className=" bg-gray-950 text-white py-12 ">
-      {/* Section Header */}
-      <header className="mb-12 text-center mt-36">
-        <h2 className="text-5xl font-bold text-white">Check out some snippets below</h2>
-        <p className="text-gray-400 mt-2 text-lg">Explore the most liked snippets</p>
-      </header>
+    <section className="bg-gray-950 text-white py-20">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Section Header */}
+        <header className="mb-16 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Check out some snippets below
+          </h2>
+          <p className="text-gray-400 text-lg md:text-xl">
+            Explore the most liked snippets
+          </p>
+        </header>
 
-      {/* Grid Layout for Displaying Snippet Cards */}
-      <div className="items-center mx-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-12 mx-auto px-6">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mx-20">
           {topLikedPosts.map((post) => (
-            <div className="w-full" key={post.id}>
+            <div 
+              key={post.id}
+              className="w-full"
+            >
               <SnippetCard post={post} />
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

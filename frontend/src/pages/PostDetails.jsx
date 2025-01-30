@@ -95,23 +95,30 @@ const PostDetails = () => {
       }
     };
 
+
     fetchPost();
+
+    // Scroll to the top when the post is loaded
+    if (!loading && post) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
     return () => clearTimeout(timer);
+    
   }, [id]);
 
   if ((loading || !minimumLoadTimePassed) && !error) {
     return <SkeletonLoader />;
+    
   }
 
-  if (loading) return <div className="bg-gray-950 text-center py-20 text-gray-500">Loading Snippet...</div>;
   if (error) return <div className="text-center py-20 text-red-400">{error}</div>;
-  if (!post) return <div className="text-center py-20 text-gray-500">No masterpiece found</div>;
+  if (!post) return <div className="text-center py-20 text-gray-500">No snippet found</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      <Navbar />
+     <div className=""> <Navbar /></div>
       
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Back Button */}
         <div className="mb-8">
           <Link
@@ -124,7 +131,7 @@ const PostDetails = () => {
         </div>
 
         {/* Main Content */}
-        <div className="bg-gray-900/40 backdrop-blur-2xl rounded-3xl border border-gray-800/50 shadow-2xl overflow-hidden">
+        <div className="bg-gray-900/40 backdrop-blur-2xl rounded-3xl border border-gray-800/50 shadow-2xl overflow-hidden ">
           {/* Header Section */}
           <div className="px-10 py-8 border-b border-gray-800/50 bg-gradient-to-r from-gray-900/60 to-gray-900/30">
             <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500">

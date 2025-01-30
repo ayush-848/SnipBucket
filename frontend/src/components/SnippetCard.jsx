@@ -8,7 +8,6 @@ import typescript from "react-syntax-highlighter/dist/esm/languages/prism/typesc
 import css from "react-syntax-highlighter/dist/esm/languages/prism/css";
 import python from "react-syntax-highlighter/dist/esm/languages/prism/python";
 
-// Register languages
 SyntaxHighlighter.registerLanguage("javascript", javascript);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
 SyntaxHighlighter.registerLanguage("css", css);
@@ -30,23 +29,23 @@ const SnippetCard = ({ post }) => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 bg-opacity-30 backdrop-blur-lg border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 min-h-[400px] flex flex-col">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-700">
+    <div className="group bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-800 h-80 flex flex-col">
+      {/* Header - Fixed height */}
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 h-16">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-100 truncate">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate max-w-[70%]">
             <Link
               to={`/posts/${post.id}`}
-              className="hover:text-green-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               {post.title}
             </Link>
           </h2>
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
             <span className="font-medium">by </span>
             <Link
               to={`/user/${post.username}`}
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
             >
               {post.username}
             </Link>
@@ -54,46 +53,50 @@ const SnippetCard = ({ post }) => {
         </div>
       </div>
 
-      {/* Tag */}
-      <div className="px-6 pt-4 mb-2">
-        <span className="inline-block px-3 py-1 text-xs font-medium bg-green-600 text-white rounded-full">
+      {/* Tag - Fixed height */}
+      <div className="px-6 py-2 h-10">
+        <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
           {post.tag}
         </span>
       </div>
 
-      {/* Code Snippet */}
-      <div className="p-6 bg-gray-800 bg-opacity-40 backdrop-blur-md text-sm flex-grow overflow-x-auto max-w-full rounded-lg">
-        <SyntaxHighlighter
-          language={post.tag}
-          style={nightOwl}
-          className="whitespace-pre-wrap break-words"
-          customStyle={{
-            padding: '20px',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            background: '#1e1e1e', // Set a default dark background for code box
-          }}
-          wrapLines={true}
-          wrapLongLines={true}
-        >
-          {truncateContent(post.content)}
-        </SyntaxHighlighter>
+      {/* Code Snippet - Flex grow with fixed height container */}
+      <div className="px-6 flex-1 overflow-hidden">
+        <div className="h-full rounded-lg overflow-hidden shadow-inner">
+          <SyntaxHighlighter
+            language={post.tag}
+            style={nightOwl}
+            customStyle={{
+              padding: '16px',
+              borderRadius: '0.5rem',
+              fontSize: '0.875rem',
+              background: 'rgb(1, 22, 39)',
+              margin: 0,
+              height: '100%',
+              overflow: 'auto'
+            }}
+            wrapLines={true}
+            wrapLongLines={true}
+          >
+            {truncateContent(post.content)}
+          </SyntaxHighlighter>
+        </div>
       </div>
 
-      {/* Footer */}
-      <div className="p-6 border-t border-gray-700">
-        <div className="flex justify-between items-center text-sm text-gray-400">
-          <div className="flex items-center space-x-3">
-            <Calendar size={16} className="text-gray-400" />
+      {/* Footer - Fixed height */}
+      <div className="px-6 py-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 h-14">
+        <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center space-x-2">
+            <Calendar className="w-4 h-4" />
             <span>{formatDate(post.createdAt)}</span>
           </div>
           <div className="flex items-center space-x-6">
-            <button className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors">
-              <Heart size={16} />
+            <button className="flex items-center space-x-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Heart className="w-4 h-4" />
               <span>{post.likes}</span>
             </button>
             <div className="flex items-center space-x-2">
-              <Eye size={16} />
+              <Eye className="w-4 h-4" />
               <span>{post.views}</span>
             </div>
           </div>

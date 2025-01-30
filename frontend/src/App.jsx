@@ -7,6 +7,7 @@ import CreatePostForm from './pages/CreatePostForm';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import { ToastContainer } from 'react-toastify';
+import Explore from './pages/Explore';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/posts/:id" element={<PostDetails />} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="/create-post" element={<CreatePostForm />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
