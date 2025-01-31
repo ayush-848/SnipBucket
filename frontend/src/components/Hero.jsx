@@ -4,6 +4,33 @@ import Typewriter from 'typewriter-effect';
 import CodeShowcase from './CodeShowcase';
 
 const Hero = () => {
+
+  const features = [
+    {
+      icon: <Code className="h-8 w-8 text-blue-400" size={24} />,
+      gradient: "from-blue-600 via-purple-600 to-indigo-600",
+      iconBg: "bg-blue-900/30 border-blue-800/50",
+      title: "Store Instantly",
+      description: "Capture and save code snippets in seconds"
+    },
+    {
+      icon: <BookOpen className="h-8 w-8 text-green-400" size={24} />,
+      gradient: "from-green-600 via-cyan-600 to-blue-600",
+      iconBg: "bg-green-900/30 border-green-800/50",
+      title: "Organize Smartly",
+      description: "Categorize with tags and languages"
+    },
+    {
+      icon: <Share2 className="h-8 w-8 text-purple-400" size={24} />,
+      gradient: "from-purple-600 via-pink-600 to-red-600",
+      iconBg: "bg-purple-900/30 border-purple-800/50",
+      title: "Share Easily",
+      description: "Collaborate with team members"
+    }
+  ];
+
+
+
   return (
     <div className="bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-12 overflow-hidden min-h-screen">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-center mt-12">
@@ -24,9 +51,6 @@ const Hero = () => {
                 />
               </span>
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-xl">
-              Revolutionize how you store, organize, and share code across your projects and team.
-            </p>
           </div>
 
           {/* Feature Highlights */}

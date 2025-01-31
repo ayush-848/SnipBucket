@@ -57,7 +57,7 @@ const Navbar = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                className="hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium"
               >
                 {item.name}
               </a>
@@ -67,13 +67,13 @@ const Navbar = () => {
               <>
                 <a
                   href="/signup"
-                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-blue-700"
                 >
                   Sign Up
                 </a>
                 <a
                   href="/login"
-                  className="inline-block bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-600"
+                  className="inline-block bg-gray-700 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-gray-600"
                 >
                   Log In
                 </a>
@@ -84,34 +84,34 @@ const Navbar = () => {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={toggleDropdown}
-                    className="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md hover:from-blue-400 hover:to-indigo-500 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:outline-none transition-all duration-300"
+                    className="inline-block cursor-pointer bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full text-base font-medium shadow-md hover:from-blue-400 hover:to-indigo-500 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:outline-none transition-all duration-300"
                   >
                     {user.username}
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded-md py-2 z-10">
+                    <div className="absolute right-0 mt-2 w-40 bg-gray-800 shadow-lg rounded-md py-2 z-50">
                       <a
-                        href="/create-post"
-                        className="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+                        href="/my-snippets"
+                        className="block px-4 py-2 text-base text-white hover:bg-gray-700"
                       >
                         My Snippets
                       </a>
                       <a
                         href="/create-post"
-                        className="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+                        className="block px-4 py-2 text-base text-white hover:bg-gray-700"
                       >
                         Add a Snippet
                       </a>
                       <a
                         href="/settings"
-                        className="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+                        className="block px-4 py-2 text-base text-white hover:bg-gray-700"
                       >
                         Settings
                       </a>
                       <button
                         onClick={logout}
-                        className="w-full text-left px-4 py-2 text-sm text-white hover:bg-red-600"
+                        className="w-full text-left px-4 py-2 text-base text-white bg-red-600 hover:bg-red-800 cursor-pointer"
                       >
                         Log Out
                       </button>

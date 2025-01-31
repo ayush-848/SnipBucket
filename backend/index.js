@@ -13,7 +13,7 @@ const app=express();
 require('dotenv').config();
 connectDB();
 
-const port=8000||process.env.PORT;
+const port=process.env.PORT;
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       "https://snip-bucket.vercel.app",
-      "http://localhost:5173",
+      `http://localhost:5173`,
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],

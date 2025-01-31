@@ -32,7 +32,7 @@ const About = () => {
           </span>
         </h2>
 
-        {/* Mobile-optimized layout */}
+        {/* Mobile layout */}
         <div className="flex flex-col sm:flex-row sm:justify-center items-center sm:items-start gap-8 sm:gap-4 relative">
           {/* Timeline Line - Hidden on mobile, visible on desktop */}
           <div className="hidden sm:block absolute top-8 left-[15%] right-[15%]">

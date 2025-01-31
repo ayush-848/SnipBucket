@@ -46,9 +46,10 @@ const SnippetCard = ({ post }) => {
 
       {/* Tag */}
       <div className="px-6 py-2">
-        <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-blue-900/30 text-blue-300 rounded-full">
-          {post.tag}
-        </span>
+        
+      <span className="inline-flex items-center rounded-md bg-transparent px-2 py-1 text-[0.7rem] font-medium text-green-500 ring-1 ring-green-500/20 ring-inset">
+        {post.tag}
+      </span>
       </div>
 
       {/* Code Snippet - Fixed height with no scrollbar */}

@@ -61,44 +61,62 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-// Get posts by a specific user (only accessible to authenticated users)
 exports.getPostsByUser = async (req, res) => {
   try {
-    const userId = req.params.id; // User ID from URL parameter
+    const userId = req.user._id;
+    console.log(userId)
 
-    // Query to fetch posts by the specific user
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     const userPostsQuery = db.collection("posts").where("authorId", "==", userId);
+    const snapshot = await userPostsQuery.get();
 
-    const snapshot = await userPostsQuery.get(); // Get posts for the user
-    const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    if (posts.length === 0) {
+    if (snapshot.empty) {
       return res.status(404).json({ message: "No posts found for this user" });
     }
 
-    res.status(200).json(posts); // Return posts of the user
+    const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(posts);
   } catch (error) {
+    console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Error fetching posts" });
   }
 };
 
-
-exports.getTopPosts = async (req, res) => {
+exports.getPostOfUser = async (req, res) => {
   try {
-    const postsCollection = db.collection("posts");
-    const snapshot = await postsCollection.orderBy("likes", "desc").limit(4).get();
+    const { id } = req.params; // Get the post ID from URL params
+    const userId = req.user._id; // Get user ID from authenticated request
 
-    const topPosts = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    if (!id || !userId) {
+      return res.status(400).json({ message: "Post ID and User ID are required" });
+    }
 
-    res.status(200).json(topPosts);
+    // Fetch the specific post that belongs to the authenticated user
+    const postDoc = await db.collection("posts").doc(id).get();
+
+    if (!postDoc.exists) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const postData = postDoc.data();
+
+    // Ensure the post belongs to the authenticated user
+    if (postData.authorId !== userId) {
+      return res.status(403).json({ message: "Unauthorized: You cannot access this post" });
+    }
+
+    res.status(200).json({ id: postDoc.id, ...postData });
   } catch (error) {
-    console.error("Error fetching top posts:", error);
-    res.status(500).json({ message: "Error fetching top posts" });
+    console.error("Error fetching post:", error);
+    res.status(500).json({ message: "Error fetching post" });
   }
 };
+
+
+
 
 // Get post by ID
 exports.getPostById = async (req, res) => {
@@ -119,8 +137,6 @@ exports.getPostById = async (req, res) => {
     res.status(500).json({ message: "Error fetching post details" });
   }
 };
-
-
 
 
 

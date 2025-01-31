@@ -8,7 +8,9 @@ import {
   CopyIcon,
   CodeIcon,
   CalendarIcon,
-  UserIcon
+  UserIcon,
+  EyeIcon,
+  ThumbsUpIcon
 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -79,11 +81,15 @@ const PostDetails = () => {
       </div>
     </div>
   );
+
+
+
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinimumLoadTimePassed(true);
     }, 2000);
-    
+  
     const fetchPost = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/posts/${id}`);
@@ -94,17 +100,19 @@ const PostDetails = () => {
         setLoading(false);
       }
     };
-
-
+  
     fetchPost();
-
-    // Scroll to the top when the post is loaded
-    if (!loading && post) {
+  
+    return () => clearTimeout(timer);
+  }, [id]);
+  
+  // New effect to scroll after post is set
+  useEffect(() => {
+    if (post) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-    return () => clearTimeout(timer);
-    
-  }, [id]);
+  }, [post]);
+  
 
   if ((loading || !minimumLoadTimePassed) && !error) {
     return <SkeletonLoader />;
@@ -116,11 +124,11 @@ const PostDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-     <div className=""> <Navbar /></div>
+      <Navbar />
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Link
             to="/"
             className="inline-flex items-center text-gray-400 hover:text-blue-400 transition-colors group"
@@ -129,7 +137,7 @@ const PostDetails = () => {
             Back 
           </Link>
         </div>
-
+  
         {/* Main Content */}
         <div className="bg-gray-900/40 backdrop-blur-2xl rounded-3xl border border-gray-800/50 shadow-2xl overflow-hidden ">
           {/* Header Section */}
@@ -139,11 +147,11 @@ const PostDetails = () => {
             </h1>
             <div className="mt-4 flex items-center space-x-6 text-gray-400">
               <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
-                <UserIcon className="h-5 w-5 text-blue-400" />
+                <UserIcon className="h-5 w-5 text-green-400" />
                 <span className="font-medium">{post.username}</span>
               </div>
               <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
-                <CalendarIcon className="h-5 w-5 text-blue-400" />
+                <CalendarIcon className="h-5 w-5 text-purple-400" />
                 <span>
                   {new Date(post.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -153,29 +161,29 @@ const PostDetails = () => {
                 </span>
               </div>
               <div className="flex items-center space-x-2 bg-gray-800/20 px-3 py-1.5 rounded-lg border border-gray-700/50">
-                <CodeIcon className="h-5 w-5 text-blue-400" />
+                <CodeIcon className="h-5 w-5 text-red-400" />
                 <span className="font-mono">{post.tag}</span>
               </div>
             </div>
           </div>
-
+  
           {/* Code Display */}
           <div className="p-4">
-            <div className=" relative group rounded-2xl overflow-hidden border-2 border-gray-800/50 shadow-xl hover:border-blue-500/30 transition-all">
+            <div className="relative group rounded-2xl overflow-hidden border-2 border-gray-800/50 shadow-xl hover:border-blue-500/30 transition-all">
               <SyntaxHighlighter
                 language={post.tag || "javascript"}
                 style={nightOwl}
                 customStyle={{
-                  overflowX:'hidden',
-                  padding: '2rem',
-                  background: '#0A0A0A',
-                  borderRadius: '0.75rem',
-                  fontSize: '0.8rem',
-                  lineHeight: '1.5',
-                  width: '100%',
-                  maxWidth: '100%',
-                  whiteSpace: 'pre-wrap',
-                  wordWrap: 'break-word'
+                  overflow: "hidden", // No scrollbars
+                  padding: "1.5rem",
+                  background: "#0A0A0A",
+                  borderRadius: "0.75rem",
+                  fontSize: "0.82rem", // Slightly smaller text for better fit
+                  lineHeight: "1.5", // Adjusted for compact display
+                  width: "100%",
+                  maxWidth: "100%",
+                  whiteSpace: "pre-wrap", // Wraps text properly
+                  wordBreak: "break-word",
                 }}
                 wrapLines={true}
                 showLineNumbers
@@ -187,49 +195,53 @@ const PostDetails = () => {
               <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={handleCopyCode}
-                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-blue-500/30 transition-colors cursor-pointer"
+                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-yellow-400/30 transition-colors cursor-pointer"
                 >
-                  <CopyIcon className="h-5 w-5 text-gray-400 hover:text-blue-400" />
+                  <CopyIcon className="h-5 w-5 text-yellow-400" />
                   <span className="text-sm text-gray-300">{copyButtonText}</span>
                 </button>
                 <button
                   onClick={handleDownload}
-                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-blue-500/30 transition-colors cursor-pointer"
+                  className="flex items-center space-x-2 bg-gray-900/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-gray-800/50 hover:border-teal-400/30 transition-colors cursor-pointer"
                 >
-                  <DownloadIcon className="h-5 w-5 text-gray-400 hover:text-blue-400" />
+                  <DownloadIcon className="h-5 w-5 text-teal-400" />
                   <span className="text-sm text-gray-300">Download</span>
                 </button>
               </div>
             </div>
           </div>
-
+  
           {/* Stats & Share */}
           <div className="px-10 pb-8">
-            <div className="flex justify-between items-center">
-              <div className="flex space-x-4 text-gray-400">
-                <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
-                  <span className="text-blue-400">Views</span>
-                  <span className="font-mono">{post.views}</span>
-                </div>
-                <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
-                  <span className="text-blue-400">Likes</span>
-                  <span className="font-mono">{post.likes}</span>
-                </div>
-              </div>
-              
-              <button
-                onClick={handleShare}
-                className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-800/50 hover:border-blue-500/30 transition-colors"
-              >
-                <Share2Icon className="h-5 w-5 text-gray-400" />
-                <span className="text-gray-300">Share</span>
-              </button>
-            </div>
-          </div>
+  <div className="flex justify-between items-center">
+    <div className="flex space-x-4 text-gray-400">
+      <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
+        <EyeIcon className="h-5 w-5 text-white" /> {/* Views Icon */}
+        <span className="text-blue-400">Views:-</span>
+        <span className="font-mono">{post.views}</span>
+      </div>
+      <div className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-700/50">
+        <ThumbsUpIcon className="h-5 w-5 text-white" /> {/* Likes Icon */}
+        <span className="text-blue-400">Likes:-</span>
+        <span className="font-mono">{post.likes}</span>
+      </div>
+    </div>
+    
+    <button
+      onClick={handleShare}
+      className="flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-xl border border-gray-800/50 hover:border-orange-400/30 transition-colors"
+    >
+      <Share2Icon className="h-5 w-5 text-blue-400" />
+      <span className="text-gray-300">Share</span>
+    </button>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
   );
+  
 };
 
 export default PostDetails;

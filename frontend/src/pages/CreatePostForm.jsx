@@ -216,7 +216,7 @@ const CreatePostForm = () => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-8 py-5 bg-gray-900/50 border-2 border-gray-800/50 rounded-2xl text-xl font-medium text-gray-200
+                className="w-full px-8 py-3 bg-gray-900/50 border-2 border-gray-800/50 rounded-2xl text-xl font-medium text-gray-200
                          focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-gray-600
                          hover:border-gray-700 transition-all duration-300 shadow-inner"
                 placeholder="Advanced Asynchronous Pattern Implementation in TypeScript..."
