@@ -96,7 +96,7 @@ const [user, setUser] = useState(null);
 
   const logout = async () => {
     if (!user) return;
-
+  
     setLogoutLoading(true);
     try {
       await axios.post(
@@ -104,10 +104,12 @@ const [user, setUser] = useState(null);
         {},
         { withCredentials: true }
       );
-
+  
       setUser(null); // Clear user state
-
+  
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Optional delay for smooth transition
+  
+      window.location.href = '/'; // Redirect to the home page
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || error.message || 'Error during logout.';
@@ -116,6 +118,7 @@ const [user, setUser] = useState(null);
       setLogoutLoading(false);
     }
   };
+  
 
   return (
     <AuthContext.Provider value={{ user, login, signUp, logout }}>
