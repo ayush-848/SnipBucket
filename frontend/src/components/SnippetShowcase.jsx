@@ -22,17 +22,6 @@ const SnippetShowcase = () => {
     fetchPosts();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xl text-gray-400">Loading posts...</span>
-        </div>
-      </div>
-    );
-  }
-
   const topLikedPosts = posts
     .sort((a, b) => b.likes - a.likes)
     .slice(0, 6);
@@ -52,14 +41,22 @@ const SnippetShowcase = () => {
 
         {/* Responsive Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 px-4 sm:px-8 lg:px-12">
-          {topLikedPosts.map((post) => (
-            <div 
-              key={post.id}
-              className="w-full"
-            >
-              <SnippetCard post={post} />
-            </div>
-          ))}
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="w-full animate-pulse bg-gray-800 p-5 rounded-lg h-36"
+                >
+                  <div className="h-6 bg-gray-700 rounded w-2/3 mb-3"></div>
+                  <div className="h-16 bg-gray-700 rounded w-full mb-2"></div>
+                  <div className="h-4 bg-gray-700 rounded w-5/6"></div>
+                </div>
+              ))
+            : topLikedPosts.map((post) => (
+                <div key={post.id} className="w-full">
+                  <SnippetCard post={post} />
+                </div>
+              ))}
         </div>
       </div>
     </section>

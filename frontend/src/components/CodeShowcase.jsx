@@ -113,7 +113,7 @@ public class HelloWorld {
         </div>
       </div>
 
-      <div className="relative h-[400px]"> {/* Increased height for code box */}
+      <div className="relative h-[380px]"> {/* Increased height for code box */}
         <div className="bg-gray-800 p-6 rounded-lg text-sm font-mono overflow-y-auto border border-gray-700 shadow-inner absolute inset-0 w-full">
           {isLoading ? (
             // Skeleton Loader with added detail
