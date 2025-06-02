@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SnippetCard from "./SnippetCard";
+import { useNavigate } from "react-router-dom"; // Add this import
 
 const SnippetShowcase = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -57,6 +59,16 @@ const SnippetShowcase = () => {
                   <SnippetCard post={post} />
                 </div>
               ))}
+        </div>
+
+        {/* Show more button */}
+        <div className="flex justify-center mt-10">
+          <button
+            className="bg-indigo-800 cursor-pointer text-white px-8 py-3 rounded-md hover:bg-blue-700 transition font-semibold text-lg shadow"
+            onClick={() => navigate("/explore")}
+          >
+            Show more
+          </button>
         </div>
       </div>
     </section>
