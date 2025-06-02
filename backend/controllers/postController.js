@@ -53,9 +53,12 @@ exports.createPost = async (req, res) => {
 // Get all posts (accessible to both authenticated and non-authenticated users)
 exports.getAllPosts = async (req, res) => {
   try {
-    const snapshot = await db.collection("posts").get(); // Get all posts
+    const snapshot = await db.collection("posts")
+      .where("visibility", "==", "public")
+      .get();
+
     const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(posts); // Return all posts
+    res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: "Error fetching posts" });
   }
