@@ -3,18 +3,20 @@ import { FaFacebookF, FaGithub, FaTwitter, FaInstagram, FaDiscord } from 'react-
 import logo from '../assets/logo.svg';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <div className="flex-shrink-0 flex items-center space-x-2">
-                        <img src={logo} alt="Logo" className="h-8 w-auto" /><span
-                          className="text-2xl font-semibold"
-                          style={{ fontFamily: "'Nova Flat', sans-serif" }}
-                        >Snipbucket
-                        </span>
-                      </div>
+              <img src={logo} alt="Logo" className="h-8 w-auto" /><span
+                className="text-2xl font-semibold"
+                style={{ fontFamily: "'Nova Flat', sans-serif" }}
+              >Snipbucket
+              </span>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
@@ -73,7 +75,7 @@ const Footer = () => {
         <hr className="my-6 border-gray-700 sm:mx-auto lg:my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-gray-400 sm:text-center">
-            © 2023{' '}
+            © {currentYear}{' '}
             <a href="/" className="hover:underline">
               Snipbucket™
             </a>
@@ -88,7 +90,7 @@ const Footer = () => {
               <span className="sr-only">Facebook page</span>
             </a>
             <a
-              href="https://github.com/Snipbucket"
+              href="https://github.com/ayush-848/SnipBucket"
               className="text-gray-400 hover:text-gray-100 ms-5"
             >
               <FaGithub className="w-5 h-5" />
