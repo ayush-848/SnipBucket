@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import Explore from './pages/Explore';
 import UserSnippets from './pages/UserSnippets';
 import UserPostDetail from './pages/UserPostDetail';
+import About from './pages/About';
 
 
 
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/my-snippets" element={<UserSnippets />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
         </Routes>
     </Router>
   );
