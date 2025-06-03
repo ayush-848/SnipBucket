@@ -1,5 +1,6 @@
 const db = require("../utils/firebase");
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const admin = require('firebase-admin');
 
 require('dotenv').config()
 
@@ -121,6 +122,7 @@ exports.getPostOfUser = async (req, res) => {
 
 
 
+
 // Get post by ID
 exports.getPostById = async (req, res) => {
   try {
@@ -196,6 +198,68 @@ exports.generateTitle = async (req, res) => {
     console.error('Title generation error:', error.response?.data || error.message);
     res.status(500).json({ error: 'Failed to generate title', details: error.response?.data || error.message });
   }
+};
+
+exports.incrementView = async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user ? req.user._id : req.ip; // fallback to IP for guests
+
+  const viewDocId = `${postId}_${userId}`;
+  const viewRef = db.collection('postViews').doc(viewDocId);
+
+  const viewDoc = await viewRef.get();
+  if (!viewDoc.exists) {
+    // Add view record
+    await viewRef.set({
+      postId,
+      userId,
+      viewedAt: new Date().toISOString(),
+    });
+    // Increment view count on post
+    await db.collection('posts').doc(postId).update({
+      views: admin.firestore.FieldValue.increment(1),
+    });
+  }
+  res.status(200).json({ success: true });
+};
+
+exports.toggleLike = async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user._id;
+
+  const likeDocId = `${postId}_${userId}`;
+  const likeRef = db.collection('postLikes').doc(likeDocId);
+
+  const likeDoc = await likeRef.get();
+  if (!likeDoc.exists) {
+    // Add like
+    await likeRef.set({
+      postId,
+      userId,
+      likedAt: new Date().toISOString(),
+    });
+    await db.collection('posts').doc(postId).update({
+      likes: admin.firestore.FieldValue.increment(1),
+    });
+    return res.status(200).json({ liked: true });
+  } else {
+    // Remove like
+    await likeRef.delete();
+    await db.collection('posts').doc(postId).update({
+      likes: admin.firestore.FieldValue.increment(-1),
+    });
+    return res.status(200).json({ liked: false });
+  }
+};
+
+// Check if post is liked by the user
+exports.isPostLiked = async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user._id;
+  const likeDocId = `${postId}_${userId}`;
+  const likeRef = db.collection('postLikes').doc(likeDocId);
+  const likeDoc = await likeRef.get();
+  res.json({ liked: likeDoc.exists });
 };
 
 

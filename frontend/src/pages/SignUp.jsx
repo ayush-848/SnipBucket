@@ -2,11 +2,12 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import logo from '../assets/logo.svg';
-import { AuthContext } from '../context/AuthContext'; // Import the context
+import { AuthContext } from '../context/AuthContext';
+import { Eye, EyeOff } from "lucide-react"; // <-- Add this import
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { signUp, message } = useContext(AuthContext); // Use context here
+  const { signUp, message } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [formField, setFormField] = useState({
     username: '',
@@ -14,6 +15,8 @@ const SignUp = () => {
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false); // <-- Add this state
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // <-- Add this state
 
   // Function to handle form field changes
   const handleChange = (e) => {
@@ -83,7 +86,7 @@ const SignUp = () => {
               {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
               {message && <p className="text-sm text-green-500">{message}</p>} {/* Display success message from context */}
               <form className="space-y-3" onSubmit={handleSubmit}>
-                {/* Full Name Field */}
+                {/* Username Field */}
                 <div>
                   <label
                     htmlFor="username"
@@ -122,7 +125,7 @@ const SignUp = () => {
                   />
                 </div>
                 {/* Password Field */}
-                <div>
+                <div className="relative">
                   <label
                     htmlFor="password"
                     className="block mb-1 text-sm font-medium text-gray-300"
@@ -130,18 +133,26 @@ const SignUp = () => {
                     Password
                   </label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     id="password"
                     value={formField.password}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400 pr-10"
                     required
                   />
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    className="absolute right-2 top-8 text-gray-400 hover:text-blue-400"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
                 </div>
                 {/* Confirm Password Field */}
-                <div>
+                <div className="relative">
                   <label
                     htmlFor="confirmPassword"
                     className="block mb-1 text-sm font-medium text-gray-300"
@@ -149,15 +160,23 @@ const SignUp = () => {
                     Confirm Password
                   </label>
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     id="confirmPassword"
                     value={formField.confirmPassword}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400 pr-10"
                     required
                   />
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    className="absolute right-2 top-8 text-gray-400 hover:text-blue-400"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  >
+                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
                 </div>
                 {/* Terms and Conditions */}
                 <div className="flex items-start">
