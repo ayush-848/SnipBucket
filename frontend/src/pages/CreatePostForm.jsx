@@ -13,7 +13,7 @@ const CreatePostForm = () => {
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("javascript");
   const [loading, setLoading] = useState(false);
-  const [visibility, setVisibility] = useState('Public');
+  const [visibility, setVisibility] = useState('public');
   const [generatingTitle, setGeneratingTitle] = useState(false);
   const [generatedTitle, setGeneratedTitle] = useState(null);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const CreatePostForm = () => {
 
   const languageOptions = [
     "javascript", "python", "java", "ruby", "go", "c", "cpp",
-    "html", "css", "sql", "typescript", "react", "node",
+    "html", "css", "sql", "typescript", "react",
   ];
 
   const generateTitle = async () => {
@@ -295,7 +295,7 @@ const CreatePostForm = () => {
                   Post Visibility:- <span className="text-green-600">{visibility}</span>
                 </label>
                 <div className="grid grid-cols-2 gap-4">
-      {['Public', 'Private'].map((vis) => (
+      {['public', 'private'].map((vis) => (
         <button
           key={vis}
           type="button"

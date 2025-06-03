@@ -14,10 +14,9 @@ const model = genAI.getGenerativeModel({
 
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, tag,username,visibility='public' } = req.body; // Default visibility is 'public'
+    const { title, content, tag, username, visibility = 'public' } = req.body; // Default visibility is 'public'
     const authorId = req.user._id; // From middleware (verified JWT)
 
-    
     if (!authorId) {
       return res.status(400).json({ message: "Invalid author ID" });
     }
@@ -32,7 +31,7 @@ exports.createPost = async (req, res) => {
       authorId: authorId, // Link the post to the authenticated user
       username: username,  // Include the username
       tag: tag,       // Add the tag to the post
-      visibility: visibility, // Use the visibility from the request body, default is 'public'
+      visibility: visibility.toLowerCase(), // Always save as lowercase
       views: 0,  // Initial views count
       likes: 0,  // Initial likes count
       createdAt: new Date().toISOString(), // Timestamp for creation
@@ -40,7 +39,7 @@ exports.createPost = async (req, res) => {
 
     // Only return the postId and success message
     res.status(201).json({
-      success:true,
+      success: true,
       message: "Post created successfully 201",
       postId: newPost.id,
     });

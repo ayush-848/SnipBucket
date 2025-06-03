@@ -31,10 +31,14 @@ const PostDetails = () => {
 
   // Increment view count (unique per user)
   useEffect(() => {
-    if (!id) return;
-    incrementView(id);
+    if (id) {
+      incrementView(id);
+    }
+    // eslint-disable-next-line
+  }, [id]);
 
-    // Check if liked
+  // Check if liked
+  useEffect(() => {
     const checkLiked = async () => {
       const liked = await isPostLiked(id);
       setLiked(liked);
