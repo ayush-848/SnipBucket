@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Heart, Eye } from "lucide-react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { isPostLiked, toggleLike } from "../utils/postActions";
+import { AuthContext } from "../context/AuthContext"; // <-- import AuthContext
 
 const SnippetCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes);
+  const { user } = useContext(AuthContext); // <-- get user
 
   useEffect(() => {
     let mounted = true;
@@ -22,7 +24,7 @@ const SnippetCard = ({ post }) => {
 
   const handleLike = async (e) => {
     e.preventDefault();
-    if (likeLoading) return;
+    if (likeLoading || !user) return; // <-- block if not logged in
     setLikeLoading(true);
     const result = await toggleLike(post.id);
     setLiked(result);
@@ -112,8 +114,9 @@ const SnippetCard = ({ post }) => {
             <button
               className="flex items-center space-x-2 transition-colors"
               onClick={handleLike}
-              disabled={likeLoading}
-              style={{ cursor: likeLoading ? "not-allowed" : "pointer" }}
+              disabled={likeLoading || !user}
+              style={{ cursor: likeLoading || !user ? "not-allowed" : "pointer", opacity: !user ? 0.6 : 1 }}
+              title={!user ? "Login to like this post" : ""}
             >
               <Heart
                 className="w-4 h-4"

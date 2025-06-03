@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { 
@@ -17,9 +17,11 @@ import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Navbar from "../components/Navbar";
 import SkeletonLoader from "../assets/SkeletonLoader";
 import { incrementView, toggleLike, isPostLiked } from "../utils/postActions";
+import { AuthContext } from "../context/AuthContext";
 
 const PostDetails = () => {
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -222,13 +224,15 @@ const PostDetails = () => {
                 </div>
                 <button
                   onClick={handleLike}
-                  disabled={likeLoading}
+                  disabled={likeLoading || !user}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-xl border transition-colors
-          ${liked
-            ? "bg-gradient-to-r from-blue-500 via-purple-600 to-indigo-600 border-blue-500 shadow-lg scale-105"
-            : "bg-gray-900/50 border-gray-700/50 hover:border-blue-400"}
-        `}
-                  style={{ cursor: likeLoading ? "not-allowed" : "pointer", transition: "all 0.15s" }}
+                  ${liked
+                    ? "bg-gradient-to-r from-blue-500 via-purple-600 to-indigo-600 border-blue-500 shadow-lg scale-105"
+                    : "bg-gray-900/50 border-gray-700/50 hover:border-blue-400"}
+                  ${!user ? "opacity-60 cursor-not-allowed" : ""}
+                `}
+                  style={{ cursor: likeLoading || !user ? "not-allowed" : "pointer", transition: "all 0.15s" }}
+                  title={!user ? "Login to like this post" : ""}
                 >
                   <ThumbsUpIcon
                     className={`h-5 w-5 ${liked ? "text-white" : "text-white"}`}
